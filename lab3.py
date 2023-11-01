@@ -2,7 +2,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 import vals3
 
-x
+x1010 = vals3.x1010
+y1010 = vals3.y1010
+m1 = "0.15% Carbon Steel (as drawn)"
+
+x1011 = vals3.x1011
+y1011 = vals3.y1011
+m2 = "0.15% Carbon Steel (annealed)"
+
+x1020 = vals3.x1020
+y1020 = vals3.y1020
+m3 = "0.4% Carbon Steel (as drawn)"
+
+x1021 = vals3.x1021
+y1021 = vals3.y1021
+m4 = "0.4% Carbon Steel (annealed)"
+
+x1040 = vals3.x1040
+y1040 = vals3.y1040
+m5 = "CZ121 Brass (60% Copper, 40% Zinc)"
 
 fig, ax = plt.subplots()
 ax.plot(x, y1, color="#FF0000")
