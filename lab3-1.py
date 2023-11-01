@@ -41,7 +41,7 @@ ax.minorticks_on()
 
 ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
 ax.set_ylabel('Stress ($\\sigma$)', fontweight ='bold')
-ax.set_title("Shear Stress vs Strain", fontweight ='bold')
+ax.set_title("Shear Stresss vs Shear Strain", fontweight ='bold')
 ax.legend([m1, m2, m3, m4, m5], bbox_to_anchor=(0.75, 0.35))
 plt.show()
 # plt.savefig("ENGG103 Lab 2.png", format='png', dpi=2500, bbox_inches='tight')
