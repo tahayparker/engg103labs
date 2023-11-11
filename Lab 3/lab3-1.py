@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 import vals3
 
 x1010 = vals3.x1010
