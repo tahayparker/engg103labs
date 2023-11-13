@@ -49,9 +49,11 @@ def metals():
     m2 = "Galvanized Mild Steel"
     m3 = "Aluminum"
 
+    stress_unit = None
+
     ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
-    ax.set_ylabel('Stress ($\\sigma$)', fontweight ='bold')
-    ax.set_title("Stresss vs Strain", fontweight ='bold')
+    ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
+    ax.set_title("Stresss vs Strain - Metals", fontweight ='bold')
     ax.legend([m1, m2, m3], loc='best')
 
 def pla():
@@ -72,9 +74,11 @@ def pla():
     m2 = "PLA - Horizontal Longitudinal Lines"
     m3 = "PLA - Mixed Orientations"
 
+    stress_unit = None
+
     ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
-    ax.set_ylabel('Stress ($\\sigma$)', fontweight ='bold')
-    ax.set_title("Stresss vs Strain", fontweight ='bold')
+    ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
+    ax.set_title("Stresss vs Strain - PLA Samples", fontweight ='bold')
     ax.legend([m1, m2, m3], loc='best')
 
 def metal_elastic():
@@ -101,8 +105,10 @@ def metal_elastic():
     m2 = "Galvanized Mild Steel - Slope = {} Pa".format(z2[0].round(2))
     m3 = "Aluminum - Slope = {} Pa".format(z3[0].round(2))
 
+    stress_unit = None
+
     ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
-    ax.set_ylabel('Stress ($\\sigma$)', fontweight ='bold')
+    ax.set_ylabel('Stress ($\\sigma$), {}'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain", fontweight ='bold')
     ax.legend([m1, m2, m3], loc='best')
 
@@ -116,12 +122,31 @@ def mild_steel():
 
     ax.plot(data[2][1:], data[3][1:], color='#2a9d8f', linewidth=1)
 
-    # Get slope of each line using numpy.polyfit
-    z2 = np.polyfit(data[14][1:], data[15][1:], 1)
+    # 0.2% Proof Stress
+    z = np.polyfit(data[14][1:], data[15][1:], 1)
     
     # Plot the line with x += 0.002
-    p = np.poly1d(z2)
+    p = np.poly1d(z)
+    x = data[14][1:]
     ax.plot(x, (p(x) + 0.002), color='#2a9d8f', linewidth=1)
+
+    # Find Ultimate Tensile Strength
+    max_stress = max(data[3][1:])
+
+    # Mark Ultimate Tensile Strength with an arrow and value
+    ax.annotate('Ultimate Tensile Strength', xy=(0.002, max_stress), xytext=(0.002, max_stress + 100000), arrowprops=dict(facecolor='black', shrink=0.05),)
+    
+    # Mark the x-axis with an arrow indicating the Elastic Strain
+    ax.annotate('Elastic Strain', xy=(0.002, 0), xytext=(0.002, -100000), arrowprops=dict(facecolor='black', shrink=0.05),)
+
+    # Mark the x-axis with an arrow indicating the Plastic Strain
+    ax.annotate('Plastic Strain', xy=(0.002, 0), xytext=(0.002, -200000), arrowprops=dict(facecolor='black', shrink=0.05),)
+    
+    stress_unit = None
+
+    ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
+    ax.set_ylabel('Stress ($\\sigma$), {}'.format(stress_unit), fontweight ='bold')
+    ax.set_title("Stresss vs Strain - Galvanized Mild Steel", fontweight ='bold')
 
 plt.show()
 # plt.savefig("ENGG103 Lab 4 Part ", format='png', dpi=2500, bbox_inches='tight')
