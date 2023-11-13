@@ -1,11 +1,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import dask.array as da
 import csv
 
 fig, ax = plt.subplots()
 
 def readfile():
-    f = open("lab4.csv", "r", encoding="utf-8")
+    f = open("vals.csv", "r", encoding="utf-8")
     data = csv.reader(f)
     data = list(data)
     f.close()
@@ -34,12 +35,14 @@ def graph_common():
 def metals():
     data = readfile()
 
-    assert data[0][0] == "x1"
+    assert data[0][0] == "\ufeffx1"
     assert data[1][0] == "y1"
+    """
     assert data[2][0] == "x2"
     assert data[3][0] == "y2"
     assert data[4][0] == "x3"
     assert data[5][0] == "y3"
+    """
 
     ax.plot(data[0][1:], data[1][1:], color='#e63946', linewidth=1)
     ax.plot(data[2][1:], data[3][1:], color='#2a9d8f', linewidth=1)
@@ -141,12 +144,14 @@ def mild_steel():
 
     # Mark the x-axis with an arrow indicating the Plastic Strain
     ax.annotate('Plastic Strain', xy=(0.002, 0), xytext=(0.002, -200000), arrowprops=dict(facecolor='black', shrink=0.05),)
-    
+
     stress_unit = None
 
     ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
     ax.set_ylabel('Stress ($\\sigma$), {}'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Galvanized Mild Steel", fontweight ='bold')
 
-plt.show()
-# plt.savefig("ENGG103 Lab 4 Part ", format='png', dpi=2500, bbox_inches='tight')
+metals()
+graph_common()
+# plt.show()
+plt.savefig("ENGG103 Lab 4 Part 1", format='png', dpi=2500, bbox_inches='tight')
