@@ -54,19 +54,24 @@ def pla():
     ax.legend([m1, m2, m3], loc='best')
 
 def metal_elastic():
-    s1 = np.genfromtxt("s7.csv", delimiter=",", autostrip=True, usecols=(0,312))
-    s8 = np.genfromtxt("s8.csv", delimiter=",", autostrip=True)
-    s9 = np.genfromtxt("s9.csv", delimiter=",", autostrip=True)
+    s1 = np.genfromtxt("s1.csv", delimiter=",", autostrip=True, usecols=range(1,312))
+    s2 = np.genfromtxt("s2.csv", delimiter=",", autostrip=True, usecols=range(1,378))
+    s3 = np.genfromtxt("s3.csv", delimiter=",", autostrip=True, usecols=range(1,344))
 
-    ax.plot(s1[0], s1[1], color='#e63946', linewidth=1)
-    ax.plot(s8[0], s8[1], color='#2a9d8f', linewidth=1)
-    ax.plot(s9[0], s9[1], color='#fb8500', linewidth=1)
+    x1, y1 = s1[0], s1[1]
+    print(x1)
+    x2, y2 = s2[0], s2[1]
+    x3, y3 = s3[0], s3[1]
+    
+    ax.plot(x1, y1, color='#e63946', linewidth=1)
+    ax.plot(x2, y2, color='#2a9d8f', linewidth=1)
+    ax.plot(x3, y3, color='#fb8500', linewidth=1)
 
     # Get slope of each line using numpy.polyfit
     
-    z1 = np.polyfit(s7[0], s7[1], 1)
-    z2 = np.polyfit(s8[0], s8[1], 1)
-    z3 = np.polyfit(s9[0], s9[1], 1)
+    z1 = np.polyfit(x1, y1, 1)
+    z2 = np.polyfit(x2, y2, 1)
+    z3 = np.polyfit(x3, y3, 1)
 
     m1 = "High Carbon Steel - Slope = {} GPa".format(z1[0].round(2))
     m2 = "Galvanized Mild Steel - Slope = {} GPa".format(z2[0].round(2))
@@ -111,11 +116,17 @@ def mild_steel():
     ax.set_ylabel('Stress ($\\sigma$), {}'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Galvanized Mild Steel", fontweight ='bold')
 
+"""
 metals()
 graph_common()
 plt.show()
 
 pla()
+graph_common()
+plt.show()
+"""
+
+metal_elastic()
 graph_common()
 plt.show()
 
