@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.stats import linregress
 import csv
 
 fig, ax = plt.subplots()
@@ -59,7 +60,6 @@ def metal_elastic():
     s3 = np.genfromtxt("s3.csv", delimiter=",", autostrip=True, usecols=range(1,344))
 
     x1, y1 = s1[0], s1[1]
-    print(x1)
     x2, y2 = s2[0], s2[1]
     x3, y3 = s3[0], s3[1]
     
@@ -67,11 +67,26 @@ def metal_elastic():
     ax.plot(x2, y2, color='#2a9d8f', linewidth=1)
     ax.plot(x3, y3, color='#fb8500', linewidth=1)
 
+    print(linregress(x3, y3))
+
     # Get slope of each line using numpy.polyfit
     
     z1 = np.polyfit(x1, y1, 1)
     z2 = np.polyfit(x2, y2, 1)
     z3 = np.polyfit(x3, y3, 1)
+
+    print(z1)
+    print(len(z1))
+    """
+    p1 = np.poly1d(z1)
+    p2 = np.poly1d(z2)
+    p3 = np.poly1d(z3)
+
+    # Plot the line
+    ax.plot(x1, p1(x1), color='#e63946', linewidth=1, linestyle='dashed')
+    ax.plot(x2, p2(x2), color='#2a9d8f', linewidth=1, linestyle='dashed')
+    ax.plot(x3, p3(x3), color='#fb8500', linewidth=1, linestyle='dashed')
+    """
 
     m1 = "High Carbon Steel - Slope = {} GPa".format(z1[0].round(2))
     m2 = "Galvanized Mild Steel - Slope = {} GPa".format(z2[0].round(2))
