@@ -55,7 +55,7 @@ def pla():
     ax.legend([m1, m2, m3], loc='best')
 
 def metal_elastic():
-    s1 = np.genfromtxt("s1.csv", delimiter=",", autostrip=True, usecols=range(1,312))
+    s1 = np.genfromtxt("te.csv", delimiter=",", autostrip=True)
     s2 = np.genfromtxt("s2.csv", delimiter=",", autostrip=True, usecols=range(1,378))
     s3 = np.genfromtxt("s3.csv", delimiter=",", autostrip=True, usecols=range(1,344))
 
@@ -67,7 +67,7 @@ def metal_elastic():
     ax.plot(x2, y2, color='#2a9d8f', linewidth=1)
     ax.plot(x3, y3, color='#fb8500', linewidth=1)
 
-    print(linregress(x3, y3))
+    print(linregress(x1, y1))
 
     # Get slope of each line using numpy.polyfit
     
