@@ -110,8 +110,13 @@ def mild_steel():
     ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
     ax.set_ylabel('Stress ($\\sigma$), {}'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Galvanized Mild Steel", fontweight ='bold')
-
+"""
 metals()
 graph_common()
 plt.show()
+"""
+pla()
+graph_common()
+plt.show()
+
 # plt.savefig("ENGG103 Lab 4 Part 1.png", format='png', dpi=2500, bbox_inches='tight')
