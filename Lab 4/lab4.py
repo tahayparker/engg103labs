@@ -54,11 +54,11 @@ def pla():
     ax.legend([m1, m2, m3], loc='best')
 
 def metal_elastic():
-    s7 = np.genfromtxt("s7.csv", delimiter=",", autostrip=True)
+    s1 = np.genfromtxt("s7.csv", delimiter=",", autostrip=True, usecols=(0,312))
     s8 = np.genfromtxt("s8.csv", delimiter=",", autostrip=True)
     s9 = np.genfromtxt("s9.csv", delimiter=",", autostrip=True)
 
-    ax.plot(s7[0], s7[1], color='#e63946', linewidth=1)
+    ax.plot(s1[0], s1[1], color='#e63946', linewidth=1)
     ax.plot(s8[0], s8[1], color='#2a9d8f', linewidth=1)
     ax.plot(s9[0], s9[1], color='#fb8500', linewidth=1)
 
@@ -110,11 +110,11 @@ def mild_steel():
     ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
     ax.set_ylabel('Stress ($\\sigma$), {}'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Galvanized Mild Steel", fontweight ='bold')
-"""
+
 metals()
 graph_common()
 plt.show()
-"""
+
 pla()
 graph_common()
 plt.show()
