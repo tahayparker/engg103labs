@@ -36,6 +36,9 @@ def metals():
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Metals", fontweight ='bold')
     ax.legend([m1, m2, m3], loc='best')
+    plt.savefig("ENGG103 Lab 4 Part 1.png", format='png', dpi=3000, bbox_inches='tight')
+    fig.clear()
+    plt.close(fig)
 
 def pla():
     fig, ax = plt.subplots()
@@ -74,6 +77,9 @@ def pla():
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - PLA Samples", fontweight ='bold')
     ax.legend([m1, m2, m3], loc='best')
+    plt.savefig("ENGG103 Lab 4 Part 2.png", format='png', dpi=3000, bbox_inches='tight')
+    fig.clear()
+    plt.close(fig)
 
 def metal_elastic():
     fig, ax = plt.subplots()
@@ -122,6 +128,9 @@ def metal_elastic():
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain", fontweight ='bold')
     ax.legend([m1, m2, m3], loc='lower right', fontsize=9)
+    plt.savefig("ENGG103 Lab 4 Part 3.png", format='png', dpi=3000, bbox_inches='tight')
+    fig.clear()
+    plt.close(fig)
 
 ### MILD STEEL NOT DONE ###
 def mild_steel():
@@ -171,7 +180,9 @@ def mild_steel():
     ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Galvanized Mild Steel", fontweight ='bold')
-
+    plt.savefig("ENGG103 Lab 4 Part 4.png", format='png', dpi=3000, bbox_inches='tight')
+    fig.clear()
+    plt.close(fig)
 
 def high_carbon():
     fig, ax = plt.subplots()
@@ -212,6 +223,11 @@ def high_carbon():
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Engineering vs True Stress Strain - High Carbon Steel", fontweight ='bold')
     ax.legend([m1, m2], loc='best')
+    plt.savefig("ENGG103 Lab 4 Part 5.png", format='png', dpi=3000, bbox_inches='tight')
+    fig.clear()
+    plt.close(fig)
 
-
-# plt.savefig("ENGG103 Lab 4 Part 1.png", format='png', dpi=2500, bbox_inches='tight')
+metals()
+pla()
+metal_elastic()
+high_carbon()
