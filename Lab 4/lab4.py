@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import linregress
-import csv
+import shapely.geometry as sg
 
 fig, ax = plt.subplots()
 
@@ -55,7 +55,7 @@ def pla():
     ax.legend([m1, m2, m3], loc='best')
 
 def metal_elastic():
-    s1 = np.genfromtxt("te.csv", delimiter=",", autostrip=True)
+    s1 = np.genfromtxt("s1.csv", delimiter=",", autostrip=True, usecols=range(1,312))
     s2 = np.genfromtxt("s2.csv", delimiter=",", autostrip=True, usecols=range(1,378))
     s3 = np.genfromtxt("s3.csv", delimiter=",", autostrip=True, usecols=range(1,344))
 
@@ -67,63 +67,53 @@ def metal_elastic():
     ax.plot(x2, y2, color='#2a9d8f', linewidth=1)
     ax.plot(x3, y3, color='#fb8500', linewidth=1)
 
-    print(linregress(x1, y1))
+    print(linregress(x1, y1).slope)
+    print(linregress(x2, y2).slope)
+    print(linregress(x3, y3).slope)
 
-    # Get slope of each line using numpy.polyfit
+    # Get slope of each line using linregress
     
-    z1 = np.polyfit(x1, y1, 1)
-    z2 = np.polyfit(x2, y2, 1)
-    z3 = np.polyfit(x3, y3, 1)
+    z1 = (linregress(x1, y1).slope) / 1000
+    z2 = (linregress(x2, y2).slope) / 1000
+    z3 = (linregress(x3, y3).slope) / 1000
 
-    print(z1)
-    print(len(z1))
-    """
-    p1 = np.poly1d(z1)
-    p2 = np.poly1d(z2)
-    p3 = np.poly1d(z3)
-
-    # Plot the line
-    ax.plot(x1, p1(x1), color='#e63946', linewidth=1, linestyle='dashed')
-    ax.plot(x2, p2(x2), color='#2a9d8f', linewidth=1, linestyle='dashed')
-    ax.plot(x3, p3(x3), color='#fb8500', linewidth=1, linestyle='dashed')
-    """
-
-    m1 = "High Carbon Steel - Slope = {} GPa".format(z1[0].round(2))
-    m2 = "Galvanized Mild Steel - Slope = {} GPa".format(z2[0].round(2))
-    m3 = "Aluminum - Slope = {} GPa".format(z3[0].round(2))
+    m1 = "High Carbon Steel - Slope = {} GPa".format(z1.round(2))
+    m2 = "Galvanized Mild Steel - Slope = {} GPa".format(z2.round(2))
+    m3 = "Aluminum - Slope = {} GPa".format(z3.round(2))
 
     stress_unit = "GPa"
 
     ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
-    ax.set_ylabel('Stress ($\\sigma$), {}'.format(stress_unit), fontweight ='bold')
+    ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain", fontweight ='bold')
-    ax.legend([m1, m2, m3], loc='best')
+    ax.legend([m1, m2, m3], loc='lower right', fontsize=9)
 
 def mild_steel():
     s2 = np.genfromtxt("s2.csv", delimiter=",", autostrip=True)
-    s8 = np.genfromtxt("s8.csv", delimiter=",", autostrip=True)
+    s2m = np.genfromtxt("s2.csv", delimiter=",", autostrip=True, usecols=range(1,378))
 
-    ax.plot(s2[0], s2[1], color='#2a9d8f', linewidth=1)
+    x1, y1 = s2[0], s2[1]
+
+    ax.plot(x1, y1, color='#8D5A97', linewidth=1)
 
     # 0.2% Proof Stress
-    z = np.polyfit(s8[0], s8[1], 1)
+    z = np.polyfit(s2m[0], s2m[1], 1)
     
     # Plot the line with x += 0.002
     p = np.poly1d(z)
-    x = s2[0]
-    ax.plot(x, (p(x) + 0.002), color='#2a9d8f', linewidth=1)
+    x2 = [(i + 0.002) for i in s2m[0]]
+    y2 = p(s2m[0])
+    ax.plot(x2, y2, color='#2a9d8f', linewidth=1, linestyle='--')
+
+    l1 = sg.LineString(np.column_stack((x1, y1)))
+    l2 = sg.LineString(np.column_stack((x2, y2)))
+    intersection = l1.intersection(l2)
+
+    plt.plot(intersection.x, intersection.y, 'x', color='orange', markersize=6)
 
     # Find Ultimate Tensile Strength
     max_stress = max(s2[1])
-
-    # Mark Ultimate Tensile Strength with an arrow and value
-    ax.annotate('Ultimate Tensile Strength', xy=(0.002, max_stress), xytext=(0.002, max_stress + 100000), arrowprops=dict(facecolor='black', shrink=0.05),)
-    
-    # Mark the x-axis with an arrow indicating the Elastic Strain
-    ax.annotate('Elastic Strain', xy=(0.002, 0), xytext=(0.002, -100000), arrowprops=dict(facecolor='black', shrink=0.05),)
-
-    # Mark the x-axis with an arrow indicating the Plastic Strain
-    ax.annotate('Plastic Strain', xy=(0.002, 0), xytext=(0.002, -200000), arrowprops=dict(facecolor='black', shrink=0.05),)
+    print("Max Stress =", max_stress)
 
     stress_unit = "GPa"
 
@@ -131,18 +121,9 @@ def mild_steel():
     ax.set_ylabel('Stress ($\\sigma$), {}'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Galvanized Mild Steel", fontweight ='bold')
 
-"""
-metals()
+mild_steel()
 graph_common()
 plt.show()
 
-pla()
-graph_common()
-plt.show()
-"""
-
-metal_elastic()
-graph_common()
-plt.show()
 
 # plt.savefig("ENGG103 Lab 4 Part 1.png", format='png', dpi=2500, bbox_inches='tight')
