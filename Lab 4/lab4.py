@@ -4,16 +4,16 @@ import shapely.geometry as sg
 import math
 from scipy.stats import linregress
 
-fig, ax = plt.subplots()
-ax.set_facecolor('#EBEBEB')
-ax.set_axisbelow(True)
-[ax.spines[side].set_visible(False) for side in ax.spines]
-ax.grid()
-ax.grid(which='major', color='white', linewidth=1.2)
-ax.grid(which='minor', color='white', linewidth=0.6)
-ax.minorticks_on()
-
 def metals():
+    fig, ax = plt.subplots()
+    ax.set_facecolor('#EBEBEB')
+    ax.set_axisbelow(True)
+    [ax.spines[side].set_visible(False) for side in ax.spines]
+    ax.grid()
+    ax.grid(which='major', color='white', linewidth=1.2)
+    ax.grid(which='minor', color='white', linewidth=0.6)
+    ax.minorticks_on()
+
     # Import CSV for each metal
     s1 = np.genfromtxt("s1.csv", delimiter=",", autostrip=True)
     s2 = np.genfromtxt("s2.csv", delimiter=",", autostrip=True)
@@ -38,6 +38,15 @@ def metals():
     ax.legend([m1, m2, m3], loc='best')
 
 def pla():
+    fig, ax = plt.subplots()
+    ax.set_facecolor('#EBEBEB')
+    ax.set_axisbelow(True)
+    [ax.spines[side].set_visible(False) for side in ax.spines]
+    ax.grid()
+    ax.grid(which='major', color='white', linewidth=1.2)
+    ax.grid(which='minor', color='white', linewidth=0.6)
+    ax.minorticks_on()
+
     # Import CSV for each material
     s4 = np.genfromtxt("s4.csv", delimiter=",", autostrip=True)
     s5 = np.genfromtxt("s5.csv", delimiter=",", autostrip=True)
@@ -53,6 +62,11 @@ def pla():
     m2 = "PLA - Horizontal Longitudinal Lines"
     m3 = "PLA - Mixed Orientations"
 
+    # Print total elongation
+    print(max(s4[0]))
+    print(max(s5[0]))
+    print(max(s6[0]))
+
     stress_unit = "GPa"
 
     # Set axis titles, graph title, and legend
@@ -62,6 +76,15 @@ def pla():
     ax.legend([m1, m2, m3], loc='best')
 
 def metal_elastic():
+    fig, ax = plt.subplots()
+    ax.set_facecolor('#EBEBEB')
+    ax.set_axisbelow(True)
+    [ax.spines[side].set_visible(False) for side in ax.spines]
+    ax.grid()
+    ax.grid(which='major', color='white', linewidth=1.2)
+    ax.grid(which='minor', color='white', linewidth=0.6)
+    ax.minorticks_on()
+
     # Import CSV for each metal, only using elastic region
     s1 = np.genfromtxt("s1.csv", delimiter=",", autostrip=True, usecols=range(1,312))
     s2 = np.genfromtxt("s2.csv", delimiter=",", autostrip=True, usecols=range(1,378))
@@ -102,6 +125,15 @@ def metal_elastic():
 
 ### MILD STEEL NOT DONE ###
 def mild_steel():
+    fig, ax = plt.subplots()
+    ax.set_facecolor('#EBEBEB')
+    ax.set_axisbelow(True)
+    [ax.spines[side].set_visible(False) for side in ax.spines]
+    ax.grid()
+    ax.grid(which='major', color='white', linewidth=1.2)
+    ax.grid(which='minor', color='white', linewidth=0.6)
+    ax.minorticks_on()
+
     s2 = np.genfromtxt("s2.csv", delimiter=",", autostrip=True)
     s2m = np.genfromtxt("s2.csv", delimiter=",", autostrip=True, usecols=range(1,378))
 
@@ -142,6 +174,15 @@ def mild_steel():
 
 
 def high_carbon():
+    fig, ax = plt.subplots()
+    ax.set_facecolor('#EBEBEB')
+    ax.set_axisbelow(True)
+    [ax.spines[side].set_visible(False) for side in ax.spines]
+    ax.grid()
+    ax.grid(which='major', color='white', linewidth=1.2)
+    ax.grid(which='minor', color='white', linewidth=0.6)
+    ax.minorticks_on()
+
     # Import CSV for metal
     s1 = np.genfromtxt("s1.csv", delimiter=",", autostrip=True)
     xeng, yeng = s1[0], s1[1]
@@ -171,9 +212,6 @@ def high_carbon():
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Engineering vs True Stress Strain - High Carbon Steel", fontweight ='bold')
     ax.legend([m1, m2], loc='best')
-
-mild_steel()
-plt.show()
 
 
 # plt.savefig("ENGG103 Lab 4 Part 1.png", format='png', dpi=2500, bbox_inches='tight')
