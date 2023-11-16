@@ -93,25 +93,31 @@ def mild_steel():
     s2m = np.genfromtxt("s2.csv", delimiter=",", autostrip=True, usecols=range(1,378))
 
     x1, y1 = s2[0], s2[1]
-
+    
+    # Plot original line
     ax.plot(x1, y1, color='#8D5A97', linewidth=1)
 
     # 0.2% Proof Stress
     z = np.polyfit(s2m[0], s2m[1], 1)
     
-    # Plot the line with x += 0.002
+    # Plot the proof stress line with x += 0.002
     p = np.poly1d(z)
     x2 = [(i + 0.002) for i in s2m[0]]
     y2 = p(s2m[0])
     ax.plot(x2, y2, color='#2a9d8f', linewidth=1, linestyle='--')
 
+    # Find intersection of the two lines
     l1 = sg.LineString(np.column_stack((x1, y1)))
     l2 = sg.LineString(np.column_stack((x2, y2)))
     intersection = l1.intersection(l2)
 
     plt.plot(intersection.x, intersection.y, 'x', color='orange', markersize=6)
 
+    # Point the intersection of the two lines with an arrow and label it away from the intersection below the graph so that it is readable
+    ax.annotate('Intersection', xy=(intersection.x, intersection.y), xytext=(intersection.x + 0.1, intersection.y - 100), arrowprops=dict(facecolor='black', shrink=0.05),)
+
     # Find Ultimate Tensile Strength
+
     max_stress = max(s2[1])
     print("Max Stress =", max_stress)
 
