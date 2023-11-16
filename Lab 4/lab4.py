@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import linregress
 import shapely.geometry as sg
+import math
+from scipy.stats import linregress
 
 fig, ax = plt.subplots()
 
@@ -114,7 +115,7 @@ def mild_steel():
     plt.plot(intersection.x, intersection.y, 'x', color='orange', markersize=6)
 
     # Point the intersection of the two lines with an arrow and label it away from the intersection below the graph so that it is readable
-    ax.annotate('Intersection', xy=(intersection.x, intersection.y), xytext=(intersection.x + 0.1, intersection.y - 100), arrowprops=dict(facecolor='black', shrink=0.05),)
+    ax.annotate('Intersection', xy=(intersection.x, intersection.y), xytext=(intersection.x + 0.005, intersection.y - 50), arrowprops=dict(arrowstyle='->', facecolor='black'),)
 
     # Find Ultimate Tensile Strength
 
@@ -124,10 +125,31 @@ def mild_steel():
     stress_unit = "GPa"
 
     ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
-    ax.set_ylabel('Stress ($\\sigma$), {}'.format(stress_unit), fontweight ='bold')
+    ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Galvanized Mild Steel", fontweight ='bold')
 
-mild_steel()
+def high_carbon():
+    s1 = np.genfromtxt("s1.csv", delimiter=",", autostrip=True)
+    xeng, yeng = s1[0], s1[1]
+    ax.plot(xeng, yeng, color='red', linewidth=1)
+
+    xtrue = [math.log(1 + i) for i in xeng] # Strain = ln(1 + eng strain)
+    ytrue = [math.prod([yeng[i], (1 + xeng[i])]) for i in range(len(yeng))] # Stress = Eng Stress(1 + eng strain)
+
+    ax.plot(xtrue, ytrue, color='#2a9d8f', linewidth=1)
+    
+    stress_unit = "GPa"
+    
+    m1 = "Engineering Stress Strain"
+    m2 = "True Stres Strain"
+
+    ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
+    ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
+    ax.set_title("Engineering vs True Stress Strain - High Carbon Steel", fontweight ='bold')
+    ax.legend([m1, m2], loc='best')
+
+
+high_carbon()
 graph_common()
 plt.show()
 
