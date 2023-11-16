@@ -71,6 +71,15 @@ def pla():
 
     stress_unit = "GPa"
 
+    # Get slope of line using linregress for use in table
+    z1 = (linregress(s4[0], s4[1]).slope)
+    z2 = (linregress(s5[0], s5[1]).slope)
+    z3 = (linregress(s6[0], s6[1]).slope)
+
+    print("PLA 1 slope:", z1)
+    print("PLA 2 slope:", z2)
+    print("PLA 3 slope:", z3)
+
     # Set axis titles, graph title, and legend
     ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
@@ -194,7 +203,6 @@ def mild_steel():
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Galvanized Mild Steel", fontweight ='bold')
 
-    plt.show()
     plt.savefig("ENGG103 Lab 4 Part 4.png", format='png', dpi=3000, bbox_inches='tight')
 
 def high_carbon():
