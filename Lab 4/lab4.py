@@ -24,6 +24,16 @@ def metals():
     ax.plot(s1[0], s1[1], color='#e63946', linewidth=1)
     ax.plot(s2[0], s2[1], color='#2a9d8f', linewidth=1)
     ax.plot(s3[0], s3[1], color='#fb8500', linewidth=1)
+
+    # Print max stress for each metal
+    print("Max Stress Metal 1:", max(s1[1]))    
+    print("Max Stress Metal 2:", max(s2[1]))
+    print("Max Stress Metal 3:", max(s3[1]))
+
+    # Print max strain for each metal
+    print("Max Strain Metal 1:", max(s1[0]))
+    print("Max Strain Metal 2:", max(s2[0]))
+    print("Max Strain Metal 3:", max(s3[0]))
     
     # Name each metal
     m1 = "High Carbon Steel"
