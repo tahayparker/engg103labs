@@ -172,8 +172,8 @@ def pla():
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - PLA Samples", fontweight ='bold')
     ax.legend([m1, m2, m3], loc='best')
-    plt.show()
-    # plt.savefig("ENGG103 Lab 4 Part 2.png", format='png', dpi=3000, bbox_inches='tight')
+    # plt.show()
+    plt.savefig("ENGG103 Lab 4 Part 2.png", format='png', dpi=3000, bbox_inches='tight')
 
 def metal_elastic():
     fig, ax = plt.subplots()
@@ -225,8 +225,8 @@ def metal_elastic():
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Linear Region of Metallic Samples", fontweight ='bold')
     ax.legend([m1, m2, m3], loc='lower right', fontsize=9)
-    plt.show()
-    # plt.savefig("ENGG103 Lab 4 Part 3.png", format='png', dpi=3000, bbox_inches='tight')
+    # plt.show()
+    plt.savefig("ENGG103 Lab 4 Part 3.png", format='png', dpi=3000, bbox_inches='tight')
 
 def mild_steel():
     fig, ax = plt.subplots()
@@ -275,16 +275,15 @@ def mild_steel():
     # Mark Ultimate Tensile Strength
     plt.plot(0.00497636363636364, max_stress, 'x', color='red', markersize=6)
 
-    max_strain = max(s2[0])
+    max_strain = max(x1)
     print("Max Strain =", max_strain)
 
     ax.annotate('Ultimate Tensile Strength - {} MPa'.format(round(max_stress, 2)), xy=(0.00497636363636364, max_stress), xytext=(0.00497636363636364 + 0.005, max_stress + 10), arrowprops=dict(arrowstyle='->', facecolor='black'),)
-
-    
+  
     # Plot the Elastic Strain line
     arrow = patches.FancyArrowPatch((0,-0.1), (0.0055,-0.1), color='red', arrowstyle='<->', mutation_scale=15)
     plt.gca().add_patch(arrow)
-    plt.text(0.0025, -0.5, "$\\epsilon_E$")
+    plt.text(0.0025, -0.7, "$\\epsilon_E$")
 
     # Plot the Plastic Strain Line
     arrow = patches.FancyArrowPatch((0.0055, -0.1), (max_strain,-0.1), color='orange', arrowstyle='<->', mutation_scale=15)
@@ -298,7 +297,7 @@ def mild_steel():
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Galvanized Mild Steel", fontweight ='bold')
 
-    plt.show()
+    # plt.show()
     plt.savefig("ENGG103 Lab 4 Part 4.png", format='png', dpi=3000, bbox_inches='tight')
 
 def high_carbon():
@@ -345,8 +344,8 @@ def high_carbon():
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Engineering vs True Stress Strain - High Carbon Steel", fontweight ='bold')
     ax.legend([m1, m2], loc='best')
-    plt.show()
-    # plt.savefig("ENGG103 Lab 4 Part 5.png", format='png', dpi=3000, bbox_inches='tight')
+    # plt.show()
+    plt.savefig("ENGG103 Lab 4 Part 5.png", format='png', dpi=3000, bbox_inches='tight')
 
 
 
