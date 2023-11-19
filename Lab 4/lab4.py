@@ -99,7 +99,7 @@ def metals():
     l31 = sg.LineString(np.column_stack((x3, y3)))
     l32 = sg.LineString(np.column_stack((x3_int, y3_int)))
     intersection3 = l31.intersection(l32)
-
+ 
     # Print Intersection values of all lines
     print("Intersection 1:", intersection1)
     print("Intersection 2:", intersection2)
