@@ -1,9 +1,16 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+import pandas as pd
 import numpy as np
 import shapely.geometry as sg
 import math
 from scipy.stats import linregress
+from decimal import Decimal
+
+# Transpose the CSVs
+def transpose():
+    for i in range(1,7):
+        pd.read_csv('{}.csv'.format(i), header=None).T.to_csv('s{}.csv'.format(i), header=False, index=False)
 
 def metals():
     fig, ax = plt.subplots()
@@ -20,20 +27,28 @@ def metals():
     s2 = np.genfromtxt("s2.csv", delimiter=",", autostrip=True)
     s3 = np.genfromtxt("s3.csv", delimiter=",", autostrip=True)
 
+    # Set x and y values for each metal
+    x1 = [Decimal(str(i)) / Decimal('55') for i in s1[0]]
+    x2 = [Decimal(str(i)) / Decimal('55') for i in s2[0]]
+    x3 = [Decimal(str(i)) / Decimal('55') for i in s3[0]]
+    y1 = [Decimal(str(i)) / Decimal('5.4') for i in s1[1]]
+    y2 = [Decimal(str(i)) / Decimal('5.4') for i in s2[1]]
+    y3 = [Decimal(str(i)) / Decimal('5.4') for i in s3[1]]
+
     # Plot each metal
-    ax.plot(s1[0], s1[1], color='#e63946', linewidth=1)
-    ax.plot(s2[0], s2[1], color='#2a9d8f', linewidth=1)
-    ax.plot(s3[0], s3[1], color='#fb8500', linewidth=1)
+    ax.plot(x1, y1, color='#e63946', linewidth=1)
+    ax.plot(x2, y2, color='#2a9d8f', linewidth=1)
+    ax.plot(x3, y3, color='#fb8500', linewidth=1)
 
     # Print max stress for each metal
-    print("Max Stress Metal 1:", max(s1[1]))    
-    print("Max Stress Metal 2:", max(s2[1]))
-    print("Max Stress Metal 3:", max(s3[1]))
+    print("Max Stress Metal 1:", max(y1))    
+    print("Max Stress Metal 2:", max(y2))
+    print("Max Stress Metal 3:", max(y3))
 
     # Print max strain for each metal
-    print("Max Strain Metal 1:", max(s1[0]))
-    print("Max Strain Metal 2:", max(s2[0]))
-    print("Max Strain Metal 3:", max(s3[0]))
+    print("Max Strain Metal 1:", max(x1))
+    print("Max Strain Metal 2:", max(x2))
+    print("Max Strain Metal 3:", max(x3))
     
     # Name each metal
     m1 = "High Carbon Steel"
@@ -47,7 +62,8 @@ def metals():
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Metallic Samples", fontweight ='bold')
     ax.legend([m1, m2, m3], loc='best')
-    plt.savefig("ENGG103 Lab 4 Part 1.png", format='png', dpi=3000, bbox_inches='tight')
+    plt.show()
+    # plt.savefig("ENGG103 Lab 4 Part 1.png", format='png', dpi=3000, bbox_inches='tight')
 
 def pla():
     fig, ax = plt.subplots()
@@ -63,7 +79,15 @@ def pla():
     s4 = np.genfromtxt("s4.csv", delimiter=",", autostrip=True)
     s5 = np.genfromtxt("s5.csv", delimiter=",", autostrip=True)
     s6 = np.genfromtxt("s6.csv", delimiter=",", autostrip=True)
-    
+
+    # Set x and y values for each material
+    x4 = [Decimal(str(i)) / Decimal('30') for i in s4[0]]
+    x5 = [Decimal(str(i)) / Decimal('30') for i in s5[0]]
+    x6 = [Decimal(str(i)) / Decimal('30') for i in s6[0]]
+    y4 = [Decimal(str(i)) / Decimal('20') for i in s4[1]]
+    y5 = [Decimal(str(i)) / Decimal('20') for i in s5[1]]
+    y6 = [Decimal(str(i)) / Decimal('20') for i in s6[1]]
+        
     # Plot each material
     ax.plot(s4[0], s4[1], color='#593F62', linewidth=1)
     ax.plot(s5[0], s5[1], color='#005f73', linewidth=1)
@@ -75,27 +99,33 @@ def pla():
     m3 = "PLA - Mixed Orientations"
 
     # Print total elongation
-    print("Total elongation PLA 1 :", max(s4[0]))
-    print("Total elongation PLA 2 :", max(s5[0]))
-    print("Total elongation PLA 3 :", max(s6[0]))
+    print("Total elongation PLA 1 :", max(x4))
+    print("Total elongation PLA 2 :", max(x5))
+    print("Total elongation PLA 3 :", max(x6))
 
     stress_unit = "GPa"
 
     # Get slope of line using linregress for use in table
-    z1 = (linregress(s4[0], s4[1]).slope)
-    z2 = (linregress(s5[0], s5[1]).slope)
-    z3 = (linregress(s6[0], s6[1]).slope)
+    z1 = (linregress([float(i) for i in x4], [float(i) for i in y4]).slope)
+    z2 = (linregress([float(i) for i in x5], [float(i) for i in y5]).slope)
+    z3 = (linregress([float(i) for i in x6], [float(i) for i in y6]).slope)
 
     print("PLA 1 slope:", z1)
     print("PLA 2 slope:", z2)
     print("PLA 3 slope:", z3)
+
+    # Print max stress
+    print("Max Stress PLA 1:", max(y4))
+    print("Max Stress PLA 2:", max(y5))
+    print("Max Stress PLA 3:", max(y6))  
 
     # Set axis titles, graph title, and legend
     ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - PLA Samples", fontweight ='bold')
     ax.legend([m1, m2, m3], loc='best')
-    plt.savefig("ENGG103 Lab 4 Part 2.png", format='png', dpi=3000, bbox_inches='tight')
+    plt.show()
+    # plt.savefig("ENGG103 Lab 4 Part 2.png", format='png', dpi=3000, bbox_inches='tight')
 
 def metal_elastic():
     fig, ax = plt.subplots()
@@ -112,25 +142,28 @@ def metal_elastic():
     s2 = np.genfromtxt("s2.csv", delimiter=",", autostrip=True, usecols=range(1,378))
     s3 = np.genfromtxt("s3.csv", delimiter=",", autostrip=True, usecols=range(1,344))
 
-    # Assign x and y values for each metal
-    x1, y1 = s1[0], s1[1]
-    x2, y2 = s2[0], s2[1]
-    x3, y3 = s3[0], s3[1]
-    
+    # Set x and y values for each metal
+    x1 = [Decimal(str(i)) / Decimal('55') for i in s1[0]]
+    x2 = [Decimal(str(i)) / Decimal('55') for i in s2[0]]
+    x3 = [Decimal(str(i)) / Decimal('55') for i in s3[0]]
+    y1 = [Decimal(str(i)) / Decimal('5.4') for i in s1[1]]
+    y2 = [Decimal(str(i)) / Decimal('5.4') for i in s2[1]]
+    y3 = [Decimal(str(i)) / Decimal('5.4') for i in s3[1]]
+
     # Plot each metal
     ax.plot(x1, y1, color='#e63946', linewidth=1)
     ax.plot(x2, y2, color='#2a9d8f', linewidth=1)
     ax.plot(x3, y3, color='#fb8500', linewidth=1)
 
-    # Print slope of each line for use in table
-    print("Metal 1 slope:", linregress(x1, y1).slope)
-    print("Metal 2 slope:", linregress(x2, y2).slope)
-    print("Metal 3 slope:", linregress(x3, y3).slope)
+    # Get slope of line using linregress for use in table
+    z1 = (linregress([float(i) for i in x1], [float(i) for i in y1]).slope)
+    z2 = (linregress([float(i) for i in x2], [float(i) for i in y2]).slope)
+    z3 = (linregress([float(i) for i in x3], [float(i) for i in y3]).slope)
 
-    # Get slope of each line using linregress for use in graph
-    z1 = (linregress(x1, y1).slope) / 1000
-    z2 = (linregress(x2, y2).slope) / 1000
-    z3 = (linregress(x3, y3).slope) / 1000
+    # Print slope of each line for use in table
+    print("Metal 1 slope:", z1)
+    print("Metal 2 slope:", z2)
+    print("Metal 3 slope:", z3)
 
     # Name each metal with integrated slope
     m1 = "High Carbon Steel - Slope = {} GPa".format(z1.round(2))
@@ -144,7 +177,8 @@ def metal_elastic():
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Linear Region of Metallic Samples", fontweight ='bold')
     ax.legend([m1, m2, m3], loc='lower right', fontsize=9)
-    plt.savefig("ENGG103 Lab 4 Part 3.png", format='png', dpi=3000, bbox_inches='tight')
+    plt.show()
+    # plt.savefig("ENGG103 Lab 4 Part 3.png", format='png', dpi=3000, bbox_inches='tight')
 
 ### MILD STEEL NOT DONE ###
 def mild_steel():
@@ -162,7 +196,10 @@ def mild_steel():
     s2 = np.genfromtxt("s2.csv", delimiter=",", autostrip=True)
     s2m = np.genfromtxt("s2.csv", delimiter=",", autostrip=True, usecols=range(1,378))
 
-    x1, y1 = s2[0], s2[1]
+    x1 = [Decimal(str(i)) / Decimal('55') for i in s2[0]]
+    y1 = [Decimal(str(i)) / Decimal('5.4') for i in s2[1]]
+    x2 = [Decimal(str(i)) / Decimal('55') for i in s2m[0]]
+    y2 = [Decimal(str(i)) / Decimal('5.4') for i in s2m[1]]
     
     # Plot original line
     ax.plot(x1, y1, color='#8D5A97', linewidth=1)
@@ -227,7 +264,12 @@ def high_carbon():
 
     # Import CSV for metal
     s1 = np.genfromtxt("s1.csv", delimiter=",", autostrip=True)
-    xeng, yeng = s1[0], s1[1]
+
+    # Set x and y values for each metal
+    x1 = [Decimal(str(i)) / Decimal('55') for i in s1[0]]
+    y1 = [Decimal(str(i)) / Decimal('5.4') for i in s1[1]]
+
+    xeng, yeng = x1, y1
 
     # Plot Engineering Stress Strain
     ax.plot(xeng, yeng, color='red', linewidth=1)
@@ -254,11 +296,24 @@ def high_carbon():
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Engineering vs True Stress Strain - High Carbon Steel", fontweight ='bold')
     ax.legend([m1, m2], loc='best')
-    plt.savefig("ENGG103 Lab 4 Part 5.png", format='png', dpi=3000, bbox_inches='tight')
+    plt.show()
+    # plt.savefig("ENGG103 Lab 4 Part 5.png", format='png', dpi=3000, bbox_inches='tight')
 
-ch = int(input("Enter option: "))
-metals() if ch == 1 else print()
-pla() if ch == 2 else print()
-metal_elastic() if ch == 3 else print()
-mild_steel() if ch == 4 else print()
-high_carbon() if ch == 5 else print()
+while True:
+    ch = int(input("Enter option: "))
+    if ch == 1:
+        metals()
+    elif ch == 2:
+        pla()
+    elif ch == 3:
+        metal_elastic()
+    elif ch == 4:
+        mild_steel()
+    elif ch == 5:
+        high_carbon()
+    elif ch == 0:
+        transpose()
+    elif ch == 9:
+        exit()
+    else:
+        print("Invalid input")
