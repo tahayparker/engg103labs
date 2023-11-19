@@ -27,6 +27,11 @@ def metals():
     s2 = np.genfromtxt("s2.csv", delimiter=",", autostrip=True)
     s3 = np.genfromtxt("s3.csv", delimiter=",", autostrip=True)
 
+    s1m = np.genfromtxt("s1.csv", delimiter=",", autostrip=True, usecols=range(1,312))
+    s2m = np.genfromtxt("s2.csv", delimiter=",", autostrip=True, usecols=range(1,378))
+    s3m = np.genfromtxt("s3.csv", delimiter=",", autostrip=True, usecols=range(1,360))
+
+
     # Set x and y values for each metal
     x1 = [Decimal(str(i)) / Decimal('55') for i in s1[0]]
     x2 = [Decimal(str(i)) / Decimal('55') for i in s2[0]]
@@ -34,6 +39,13 @@ def metals():
     y1 = [Decimal(str(i)) / Decimal('5.4') for i in s1[1]]
     y2 = [Decimal(str(i)) / Decimal('5.4') for i in s2[1]]
     y3 = [Decimal(str(i)) / Decimal('5.4') for i in s3[1]]
+
+    x1m = [Decimal(str(i)) / Decimal('55') for i in s1m[0]]
+    x2m = [Decimal(str(i)) / Decimal('55') for i in s2m[0]]
+    x3m = [Decimal(str(i)) / Decimal('55') for i in s3m[0]]
+    y1m = [Decimal(str(i)) / Decimal('5.4') for i in s1m[1]]
+    y2m = [Decimal(str(i)) / Decimal('5.4') for i in s2m[1]]
+    y3m = [Decimal(str(i)) / Decimal('5.4') for i in s3m[1]]
 
     # Plot each metal
     ax.plot(x1, y1, color='#e63946', linewidth=1)
@@ -57,13 +69,49 @@ def metals():
 
     stress_unit = "GPa"
 
+    # 0.2% Proof Stress
+    z1 = np.polyfit([float(i) for i in x1m], [float(i) for i in y1m], 1)
+    z2 = np.polyfit([float(i) for i in x2m], [float(i) for i in y2m], 1)
+    z3 = np.polyfit([float(i) for i in x3m], [float(i) for i in y3m], 1)
+    
+    # Plot the proof stress line with x += 0.002
+    p1 = np.poly1d(z1)
+    p2 = np.poly1d(z2)
+    p3 = np.poly1d(z3)
+    
+    x1_int = [(Decimal(i) + Decimal('0.002')) for i in x1m]
+    x2_int = [(Decimal(i) + Decimal('0.002')) for i in x2m]
+    x3_int = [(Decimal(i) + Decimal('0.002')) for i in x3m]
+
+    y1_int = p1([float(i) for i in x1m])
+    y2_int = p2([float(i) for i in x2m])
+    y3_int = p3([float(i) for i in x3m])
+
+    # Find intersection of the two lines
+    l11 = sg.LineString(np.column_stack((x1, y1)))
+    l12 = sg.LineString(np.column_stack((x1_int, y1_int)))
+    intersection1 = l11.intersection(l12)
+
+    l21 = sg.LineString(np.column_stack((x2, y2)))
+    l22 = sg.LineString(np.column_stack((x2_int, y2_int)))
+    intersection2 = l21.intersection(l22)
+
+    l31 = sg.LineString(np.column_stack((x3, y3)))
+    l32 = sg.LineString(np.column_stack((x3_int, y3_int)))
+    intersection3 = l31.intersection(l32)
+
+    # Print Intersection values of all lines
+    print("Intersection 1:", intersection1)
+    print("Intersection 2:", intersection2)
+    print("Intersection 3:", intersection3)
+
     # Set axis titles, graph title, and legend
     ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Metallic Samples", fontweight ='bold')
     ax.legend([m1, m2, m3], loc='best')
-    plt.show()
-    # plt.savefig("ENGG103 Lab 4 Part 1.png", format='png', dpi=3000, bbox_inches='tight')
+    # plt.show()
+    plt.savefig("ENGG103 Lab 4 Part 1.png", format='png', dpi=3000, bbox_inches='tight')
 
 def pla():
     fig, ax = plt.subplots()
@@ -180,7 +228,6 @@ def metal_elastic():
     plt.show()
     # plt.savefig("ENGG103 Lab 4 Part 3.png", format='png', dpi=3000, bbox_inches='tight')
 
-### MILD STEEL NOT DONE ###
 def mild_steel():
     fig, ax = plt.subplots()
     ax.set_facecolor('#EBEBEB')
@@ -191,40 +238,38 @@ def mild_steel():
     ax.grid(which='minor', color='white', linewidth=0.6)
     ax.minorticks_on()
 
-    fig.set_size_inches(22, 11)
-
     s2 = np.genfromtxt("s2.csv", delimiter=",", autostrip=True)
     s2m = np.genfromtxt("s2.csv", delimiter=",", autostrip=True, usecols=range(1,378))
 
     x1 = [Decimal(str(i)) / Decimal('55') for i in s2[0]]
-    y1 = [Decimal(str(i)) / Decimal('5.4') for i in s2[1]]
+    y1 = [math.prod([(Decimal(str(i)) / Decimal('5.4')), 1000]) for i in s2[1]]
     x2 = [Decimal(str(i)) / Decimal('55') for i in s2m[0]]
-    y2 = [Decimal(str(i)) / Decimal('5.4') for i in s2m[1]]
+    y2 = [math.prod([(Decimal(str(i)) / Decimal('5.4')), 1000]) for i in s2m[1]]
     
     # Plot original line
     ax.plot(x1, y1, color='#8D5A97', linewidth=1)
 
     # 0.2% Proof Stress
-    z = np.polyfit(s2m[0], s2m[1], 1)
+    z = np.polyfit([float(i) for i in x2], [float(i) for i in y2], 1)
     
     # Plot the proof stress line with x += 0.002
     p = np.poly1d(z)
-    x2 = [(i + 0.002) for i in s2m[0]]
-    y2 = p(s2m[0])
-    ax.plot(x2, y2, color='#2a9d8f', linewidth=1, linestyle='--')
+    x21 = [(Decimal(i) + Decimal('0.002')) for i in x2]
+    y21 = p([float(i) for i in x2])
+    ax.plot(x21, y21, color='#2a9d8f', linewidth=1, linestyle='--')
 
     # Find intersection of the two lines
     l1 = sg.LineString(np.column_stack((x1, y1)))
-    l2 = sg.LineString(np.column_stack((x2, y2)))
+    l2 = sg.LineString(np.column_stack((x21, y21)))
     intersection = l1.intersection(l2)
 
     plt.plot(intersection.x, intersection.y, 'x', color='orange', markersize=6)
 
     # Point the intersection of the two lines with an arrow and label it away from the intersection below the graph so that it is readable
-    ax.annotate('0.2% Proof Yield Strength - {} GPa'.format(intersection.y.round(2)), xy=(intersection.x, intersection.y), xytext=(intersection.x + 0.005, intersection.y - 50), arrowprops=dict(arrowstyle='->', facecolor='black'),)
+    ax.annotate('0.2% Proof Yield Strength - {} MPa'.format(intersection.y.round(2)), xy=(intersection.x, intersection.y), xytext=(intersection.x + 0.005, intersection.y - 50), arrowprops=dict(arrowstyle='->', facecolor='black'),)
 
     # Find Ultimate Tensile Strength
-    max_stress = max(s2[1])
+    max_stress = max([float(i) for i in y1])
     print("Max Stress =", max_stress)
 
     # Mark Ultimate Tensile Strength
@@ -233,8 +278,9 @@ def mild_steel():
     max_strain = max(s2[0])
     print("Max Strain =", max_strain)
 
-    ax.annotate('Ultimate Tensile Strength - {} GPa'.format(max_stress.round(2)), xy=(0.00497636363636364, max_stress), xytext=(0.00497636363636364 + 0.005, max_stress + 10), arrowprops=dict(arrowstyle='->', facecolor='black'),)
+    ax.annotate('Ultimate Tensile Strength - {} MPa'.format(round(max_stress, 2)), xy=(0.00497636363636364, max_stress), xytext=(0.00497636363636364 + 0.005, max_stress + 10), arrowprops=dict(arrowstyle='->', facecolor='black'),)
 
+    
     # Plot the Elastic Strain line
     arrow = patches.FancyArrowPatch((0,-0.1), (0.0055,-0.1), color='red', arrowstyle='<->', mutation_scale=15)
     plt.gca().add_patch(arrow)
@@ -244,12 +290,15 @@ def mild_steel():
     arrow = patches.FancyArrowPatch((0.0055, -0.1), (max_strain,-0.1), color='orange', arrowstyle='<->', mutation_scale=15)
     plt.gca().add_patch(arrow)
     plt.text(0.1626, -0.5, "$\\epsilon_P$")
-    stress_unit = "GPa"
+    
+
+    stress_unit = "MPa"
 
     ax.set_xlabel('Strain ($\\epsilon$)', fontweight ='bold')
     ax.set_ylabel('Stress ($\\sigma$, {})'.format(stress_unit), fontweight ='bold')
     ax.set_title("Stresss vs Strain - Galvanized Mild Steel", fontweight ='bold')
 
+    plt.show()
     plt.savefig("ENGG103 Lab 4 Part 4.png", format='png', dpi=3000, bbox_inches='tight')
 
 def high_carbon():
@@ -298,6 +347,9 @@ def high_carbon():
     ax.legend([m1, m2], loc='best')
     plt.show()
     # plt.savefig("ENGG103 Lab 4 Part 5.png", format='png', dpi=3000, bbox_inches='tight')
+
+
+
 
 while True:
     ch = int(input("Enter option: "))
